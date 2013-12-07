@@ -8,7 +8,7 @@
  * @since 1.0.0
  */
 
-add_action('post-plupload-upload-ui', 'filepicker_media_upload');
+add_action('post-upload-ui', 'filepicker_media_upload');
 function filepicker_media_upload()
 {
 
@@ -19,7 +19,7 @@ function filepicker_media_upload()
 
 	?>
 	<p class="filepickerio_upload">
-		<button class="fp-pick button-secondary"><?php print __( 'Filepicker.io uploader', 'filepicker'); ?></button>
+		<button class="fp-pick button-secondary" onclick="fpforwp.pick()"><?php print __( 'Filepicker.io uploader', 'filepicker'); ?></button>
 	</p>
 	<?php
 }

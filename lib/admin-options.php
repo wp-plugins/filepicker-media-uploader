@@ -6,19 +6,10 @@ $filepicker = new Filepicker();
 
 function filepicker_sanitize_admin_inputs($filepicker_options, $filepicker_options_post, $filepicker)
 {
-	$filepicker_defaults = array(
-		'api_key' 				=> null,
-		'default_user' 			=> 1,
-		'guest_access' 			=> 1,
-		'maxsize' 				=> 10*1024,
-		'onSuccess' 			=> '',
-		'mimetypes' 			=> array('image/*'),
-		'services' 				=> array('FACEBOOK', 'INSTAGRAM', 'FLICKR'),
-	);
-	foreach( $filepicker_defaults as $field => $default){
+	foreach( $filepicker->filepicker_defaults as $field => $default){
 		if( isset($filepicker_options_post[$field]) && $field == 'services' ){
 			$services = array();
-			foreach( $filepicker->all_file_picker_services as $service ){
+			foreach( $filepicker->filepicker_services as $service ){
 				if( in_array($service, $filepicker_options_post['services']) ){ array_push($services, $service); }
 			}
 			$filepicker_options[$field] = $services;
@@ -49,12 +40,24 @@ if($filepicker_options_post){
 
 ?>
 
+<style>
+	#filepicker-options-form td, #filepicker-options-form th {
+		text-align: left;
+		vertical-align: top;
+		padding-bottom: 30px;
+	}
+	#filepicker-options-form td.col2 {
+		padding: 6px 20px;
+		color: #aaa;
+	}
+</style>
+
 <div class="wrap">
 
 	<div class="icon32" id="icon-options-general"><br></div><h2>Filepicker.io Settings</h2>
 
 	<p style="text-align: left;">
-		<h3>Connect, Store, and Process any file from anywhere on the Internet:  <a target="_blank" href="https://www.inkfilepicker.com/">Filepicker.io</a></h3>
+		<h3>Upload & Store any file - from anywhere on the Internet:  <a target="_blank" href="https://www.inkfilepicker.com/">Filepicker.io</a></h3>
 	</p>
 
 	<div id="filepicker-options-form">
@@ -67,40 +70,131 @@ if($filepicker_options_post){
 			<table class="filepicker-table">
 				<tbody>
 				<tr>
-					<th><label for="category_base">Filepicker.io API Key</label></th>
-					<td class="col1"></td>
-					<td class="col2">
+					<th><label for="category_base">API Key</label></th>
+					<td class="col1">
 						<input type="text" class="regular-text code" value="<?php echo $filepicker_options['api_key']; ?>" id="filepicker-api_key" name="filepicker_options[api_key]">
+					</td>
+					<td class="col2">
+						Required
 					</td>
 				</tr>
 				<tr>
-					<th><label for="category_base">Filepicker.io Services</label></th>
-					<td class="col1"></td>
-					<td class="col2">
+					<th><label for="category_base">Services</label></th>
+					<td class="col1">
 						<select id="filepicker-services" name="filepicker_options[services][]" class="large-text" style="width:300px;height:90px" multiple>
-						<?php foreach( $filepicker->all_file_picker_services as $service ): ?>
+						<?php foreach( $filepicker->filepicker_services as $service ): ?>
 							<option value="<?php print $service ?>" <?php if( in_array($service, $filepicker_options['services']) ){print "selected='selected'";} ?>><?php print $service ?></option>
 						<?php endforeach; ?>
 						</select>
 					</td>
+					<td class="col2">
+						These are the services you are allowing people to upload files from
+					</td>
 				</tr>
 				<tr>
-					<th><label for="category_base">OnSuccess Function</label></th>
-					<td class="col1"></td>
+					<th><label for="category_base">Upload Container</label></th>
+					<td class="col1">
+						<input type="text" class="regular-text code" value="<?php echo $filepicker_options['container']; ?>" id="filepicker-container" name="filepicker_options[container]">
+					</td>
 					<td class="col2">
-						<textarea class="regular-text code" id="filepicker-onSuccess" style="width:300px;height:120px" name="filepicker_options[onSuccess]"><?php echo $filepicker_options['onSuccess']; ?></textarea>
+						Where the filepicker.io uploader should be - default is a popup window<br/>
+						(window, modal, iframeID)
+					</td>
+				</tr>
+				<tr>
+					<th><label for="category_base">Media Owner</label></th>
+					<td class="col1">
+						<?php $users = get_users( array('orderby' => 'id', 'order' => 'DESC') ); ?>
+						<select id="filepicker-media_owner" name="filepicker_options[media_owner]" class="large-text" style="width:300px">
+							<option value="logged_in" <?php if( 'logged_in' == $filepicker_options['media_owner'] ){print "selected='selected'";} ?>>User must be logged in to wordpress to upload files</option>
+						<?php foreach( $users as $user ): ?>
+							<option value="<?php print $user->ID ?>" <?php if( $user->ID == $filepicker_options['media_owner'] ){print "selected='selected'";} ?>><?php print $user->data->display_name ?></option>
+						<?php endforeach; ?>
+						</select>
+					</td>
+					<td class="col2">
+						Define what wordpress user will own the files that are uploaded.<br/>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="category_base">Cloud Storage<br/><small>(optional)</small></label></th>
+					<td class="col1">
+						<select id="filepicker-cloud_storage" name="filepicker_options[cloud_storage]" class="large-text" style="width:300px">
+						<?php foreach( $filepicker->filepicker_storage as $type => $desc ): ?>
+							<option value="<?php print $type ?>" <?php if( $type == $filepicker_options['cloud_storage'] ){print "selected='selected'";} ?>><?php print $desc ?></option>
+						<?php endforeach; ?>
+						</select>
+					</td>
+					<td class="col2">
+						Copy uploads to your own S3, Dropbox, etc.<br/>
+						Requires additional setup & costs at Filepicker.io
+					</td>
+				</tr>
+				<tr>
+					<th><label for="category_base">Cloud Folder<br/><small>(optional)</small></label></th>
+					<td class="col1">
+						<input type="text" class="regular-text code" value="<?php echo $filepicker_options['cloud_folder']; ?>" id="filepicker-cloud_folder" name="filepicker_options[cloud_folder]">
+					</td>
+					<td class="col2">
+						Bucket/Container to use inside of your cloud storage
+					</td>
+				</tr>
+				<tr>
+					<th><label for="category_base">OnSuccess Function<br/><small>(optional)</small></label></th>
+					<td class="col1">
+						<textarea class="regular-text code" id="filepicker-onSuccess" style="width:300px;height:80px" name="filepicker_options[onSuccess]"><?php echo stripslashes($filepicker_options['onSuccess']); ?></textarea>
+					</td>
+					<td class="col2">
+						Javascript to be performed after the filepicker popup closes.<br/>
+						This will not fire when filepicker.io is used in the admin, only when it's used via the shortcode.
 					</td>
 				</tr>
 				<tr>
 					<th>&nbsp;</th>
-					<td class="col1"></td>
-					<td class="col2">
+					<td class="col1">
 						<input type="submit" value="Save Settings" class="button-primary"/>
+					</td>
+					<td class="col2">
 					</td>
 				</tr>
 				</tbody>
 			</table>
 		</form>
+
+		<p style="text-align: left;">
+			<h3>Shortcode Examples</h3>
+		</p>
+
+		<table class="filepicker-notes">
+			<tbody>
+			<tr>
+				<td class="col1">
+					[filepicker]
+				</td>
+				<td class="col2">
+					Drop this in a page or post to allow users the ability to attach images to that page or post
+				</td>
+			</tr>
+			<tr>
+				<td class="col1">
+					[filepicker<br/> button_title='Upload a Photo'<br/> post_id=1]
+				</td>
+				<td class="col2">
+					In this example, we customize the button title and define a different post to attach the uploaded images to
+				</td>
+			</tr>
+			<tr>
+				<td class="col1">
+					[filepicker<br/> iframe_src=/upload]
+				</td>
+				<td class="col2">
+					In this example, we are creating an iframe that includes the /upload page.<br/>
+					Be sure to set the Upload Container to the iframe ID
+				</td>
+			</tr>
+			</tbody>
+		</table>
+
 
 	</div><!-- filepicker-options-form -->
 

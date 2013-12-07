@@ -17,31 +17,37 @@ function filepicker_scripts()
 	wp_register_script('filepicker_for_wordpress', FILEPICKER_PLUGIN_URL . 'lib/filepicker_for_wordpress.js', array('filepicker', 'jquery'));
 	wp_register_script('cross_browser_ajax', FILEPICKER_PLUGIN_URL . 'lib/cross_browser_ajax.js', array('jquery'));
 
-	if( !empty($_GLOBALS['filepicker']) )
-	{
+	if( !empty($_GLOBALS['filepicker']) ){
 		$filepicker = $_GLOBALS['filepicker'];
 	}
-	else
-	{
+	else{
 		$filepicker = new Filepicker();
 	}
 
-	/* get plugin options or set default values */
-	$maxsize 	= (!empty($filepicker->filepicker_options['maxsize']) ? $filepicker->filepicker_options['maxsize'] : 10*1024);
-	$onSuccess 	= (!empty($filepicker->filepicker_options['onSuccess']) ? $filepicker->filepicker_options['onSuccess'] : 'location.reload();');
-	$mimetypes 	= (!empty($filepicker->filepicker_options['mimetypes']) ? $filepicker->filepicker_options['mimetypes'] :  array('image/*') );
-	$services 	= (!empty($filepicker->filepicker_options['services']) ? $filepicker->filepicker_options['services'] : array('FACEBOOK', 'INSTAGRAM', 'FLICKR') );
+	if( is_numeric($filepicker->filepicker_options['media_owner']) ){
+		$perms = $filepicker->filepicker_options['media_owner'];
+	}
+	elseif ( current_user_can( 'upload_files' ) ){
+		$perms = get_current_user_id();
+	}
+	else{
+		$perms = __("You don't have permission to upload files, please log in to continue", 'filepicker');
+	}
 
 	wp_localize_script( 'filepicker_for_wordpress', 'filepicker_ajax',
 		array(
 			'ajaxurl' 		=> admin_url( 'admin-ajax.php' ),
 			'nonce'   		=> wp_create_nonce('filepicker-media'),
 			'apikey'  		=> $filepicker->filepicker_options['api_key'],
-			'maxsize'		=> $maxsize,
+			'maxsize'		=> $filepicker->filepicker_options['maxsize'],
 			'debug'			=> (FILEPICKER_DEBUG ? 'true' : 'false'),
-			'onSuccess'		=> $onSuccess,
-			'mimetypes'		=> $mimetypes,
-			'services' 		=> $services,
+			'onSuccess'		=> stripslashes($filepicker->filepicker_options['onSuccess']),
+			'services'		=> $filepicker->filepicker_options['services'],
+			'container'		=> $filepicker->filepicker_options['container'],
+			'mimetypes'		=> $filepicker->filepicker_options['mimetypes'],
+			'cloud_storage' => $filepicker->filepicker_options['cloud_storage'],
+			'cloud_folder' 	=> $filepicker->filepicker_options['cloud_folder'],
+			'perms' 		=> $perms,
 		)
 	);
 

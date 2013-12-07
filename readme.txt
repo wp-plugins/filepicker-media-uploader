@@ -35,8 +35,17 @@ Yes, although currently a starter account is free.
 = 1.0.0 =
 * Initial Wordpress.com version
 
+= 2.0.0 =
+* Add all the options to be accessible from the Admin settings page
+* Begin language support
+* Added help text & examples to the settings page
+* Added iframe support to the shortcode
+* Lots of cleanup & refactoring
+
 == Upgrade Notice ==
 
 = 1.0.0 =
 Initial release
 
+= 2.0.0 =
+Please refresh/save the admin settings to reset the new option array
