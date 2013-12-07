@@ -15,20 +15,29 @@ Uses the filepicker.io service to upload media for your wordpress site
 
 == Installation ==
 
-1. Upload dntly folder to the `/wp-content/plugins/` directory
+1. Upload the plugin folder to the `/wp-content/plugins/` directory
 1. Activate the plugin through the 'Plugins' menu in WordPress
-1. Add you API Key
+1. Add you filepicker.io API Key
 1. drop the shortcode [filepicker] in a post or page - or upload via the media section of the admin
 
 == Frequently Asked Questions ==
 
-= Do I need a filepicker.io account =
+= Do I need a filepicker.io account? =
 
 Yes, although currently a starter account is free.
 
+= Does it work with the wordpress media uploader? =
+
+Yes.
+
+= Is it easily added to pages or posts for signed-in & non signed-in users to upload files? =
+
+Yes.
+
 == Screenshots ==
 
-1. Settings
+1. Admin Settings
+1. Media Upload Integration
 
 == Changelog ==
 
@@ -41,6 +50,9 @@ Yes, although currently a starter account is free.
 * Added help text & examples to the settings page
 * Added iframe support to the shortcode
 * Lots of cleanup & refactoring
+
+= 2.0.1 =
+* update the readme
 
 == Upgrade Notice ==
 
