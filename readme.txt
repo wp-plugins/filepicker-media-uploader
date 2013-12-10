@@ -54,6 +54,10 @@ Yes.
 = 2.0.1 =
 * update the readme
 
+= 2.0.2 =
+* added the window.inkblob object for accessing the current uploaded media via javascript
+* cleanup & refactoring
+
 == Upgrade Notice ==
 
 = 1.0.0 =
