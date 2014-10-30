@@ -1,5 +1,5 @@
 === Filepicker ===
-Contributors: shanaver
+Contributors: shanaver, jasonfilepicker
 Tags: filepicker.io media uploads facebook dropbox google-drive box skydrive instagram picasa instagram flickr github evernote alfresco
 Requires at least: 3.0.1
 Tested up to: 3.7.1
