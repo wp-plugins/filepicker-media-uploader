@@ -19,7 +19,8 @@ function filepicker_media_upload()
 
 	?>
 	<p class="filepickerio_upload">
-		<button class="fp-pick button-secondary" onclick="fpforwp.pick()"><?php print __( 'Filepicker.io uploader', 'filepicker'); ?></button>
+		<button class="fp-pick button-secondary" onclick="fpforwp.pick()"
+		style="z-index: 1; position: relative"><?php print __( 'Filepicker.io uploader', 'filepicker'); ?></button>
 	</p>
 	<?php
 }

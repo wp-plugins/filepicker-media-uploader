@@ -14,6 +14,9 @@ function filepicker_sanitize_admin_inputs($filepicker_options, $filepicker_optio
 			}
 			$filepicker_options[$field] = $services;
 		}
+		elseif (isset($filepicker_options_post[$field]) && $field == 'mimetypes') {
+				$filepicker_options['mimetypes'] = explode(',', $filepicker_options_post['mimetypes']);
+		}
 		elseif( isset($filepicker_options_post[$field]) ){
 			$filepicker_options[$field] = sanitize_text_field( $filepicker_options_post[$field] );
 		}
@@ -89,6 +92,17 @@ if($filepicker_options_post){
 					</td>
 					<td class="col2">
 						These are the services you are allowing people to upload files from
+					</td>
+				</tr>
+				<tr>
+					<th><label for="category_base">Mimetypes</label></th>
+					<td class="col1">
+						<input type="text" class="regular-text code" value="<?php echo join(',', $filepicker_options['mimetypes']); ?>"
+					id="filepicker-mimetypes" name="filepicker_options[mimetypes]">
+					</td>
+					<td class="col2">
+						Mimetypes allow to specify the file extensions that can be uploaded.<br>
+						NOTE: The coma at the end of the mimetype list must be removed e.g mimetype1,mimetype2
 					</td>
 				</tr>
 				<tr>

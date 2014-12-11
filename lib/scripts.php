@@ -2,16 +2,17 @@
 
 /**
 *
-* Enqueue javascripts
+* Enqueue javascripts & CSS
 *
-* @since 1.0.0
+* @since 2.1.0
 *
 **/
 
 add_action('init', 'filepicker_scripts');
 function filepicker_scripts()
 {
-
+	// Load a CSS in order to make the Filepicker modal pop up on the foreground of the Wordpress modal
+	wp_register_style('filepicker-style', FILEPICKER_PLUGIN_URL . 'css/filepicker_style.css');
 	wp_register_script('filepicker', FILEPICKER_PLUGIN_URL . 'lib/filepicker.js');
 	wp_register_script('filepicker_debug', 'https://api.filepicker.io/v1/filepicker_debug.js', array('filepicker'));
 	wp_register_script('filepicker_for_wordpress', FILEPICKER_PLUGIN_URL . 'lib/filepicker_for_wordpress.js', array('filepicker', 'jquery'));
@@ -52,6 +53,8 @@ function filepicker_scripts()
 	);
 
 	add_action('wp_enqueue_scripts', function(){
+		// Enqueue a CSS on the front end
+		wp_enqueue_style('filepicker-style');
 		wp_enqueue_script('filepicker');
 		wp_enqueue_script('filepicker_for_wordpress');
 		wp_enqueue_script('cross_browser_ajax');
@@ -59,6 +62,8 @@ function filepicker_scripts()
 	});
 
 	add_action('admin_enqueue_scripts', function(){
+		// Enqueue a CSS on admin pages
+		wp_enqueue_style('filepicker-style');
 		wp_enqueue_script('filepicker');
 		wp_enqueue_script('filepicker_for_wordpress');
 		wp_enqueue_script('cross_browser_ajax');

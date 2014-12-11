@@ -57,6 +57,10 @@ Yes.
 = 2.0.2 =
 * added the window.inkblob object for accessing the current uploaded media via javascript
 * cleanup & refactoring
+= 2.0.3 =
+* Added customizable mimetypes
+* Added modal window option
+* Added automatic Media Library refresh after upload
 
 == Upgrade Notice ==
 
