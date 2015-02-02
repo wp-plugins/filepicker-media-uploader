@@ -57,10 +57,15 @@ Yes.
 = 2.0.2 =
 * added the window.inkblob object for accessing the current uploaded media via javascript
 * cleanup & refactoring
+
 = 2.0.3 =
 * Added customizable mimetypes
 * Added modal window option
 * Added automatic Media Library refresh after upload
+
+= 2.0.4 =
+* Fixed Media Collection not refreshing in Media Upload View.
+* Fixed double event listener bug when opening FP dialog in Media Upload View.
 
 == Upgrade Notice ==
 
@@ -69,3 +74,4 @@ Initial release
 
 = 2.0.0 =
 Please refresh/save the admin settings to reset the new option array
+
