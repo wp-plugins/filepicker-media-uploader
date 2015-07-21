@@ -1,8 +1,8 @@
 === Filepicker ===
-Contributors: shanaver, jasonfilepicker
+Contributors: shanaver, jasonfilepicker, walet
 Tags: filepicker.io media uploads facebook dropbox google-drive box skydrive instagram picasa instagram flickr github evernote alfresco
 Requires at least: 3.0.1
-Tested up to: 3.7.1
+Tested up to: 4.2.2
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -66,6 +66,10 @@ Yes.
 = 2.0.4 =
 * Fixed Media Collection not refreshing in Media Upload View.
 * Fixed double event listener bug when opening FP dialog in Media Upload View.
+
+= 2.0.5 =
+* Added multiple files upload
+* Added new filepicker widget
 
 == Upgrade Notice ==
 
